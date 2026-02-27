@@ -1,0 +1,40 @@
+media:
+  input: public/images
+  output: /images
+content:
+  - name: writing
+    label: Writing
+    type: collection
+    path: src/content/writing
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - name: date
+        label: Date
+        type: date
+        required: true
+      - name: category
+        label: Category
+        type: select
+        options:
+          - Post
+          - Note
+          - Review
+        required: true
+      - name: body
+        label: Body
+        type: rich-text
+  - name: logs
+    label: Logs
+    type: collection
+    path: src/content/logs
+    fields:
+      - name: date
+        label: Date
+        type: date
+        required: true
+      - name: body
+        label: Body
+        type: rich-text

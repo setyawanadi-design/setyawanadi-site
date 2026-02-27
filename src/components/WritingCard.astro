@@ -1,0 +1,105 @@
+---
+interface Props {
+    title: string;
+    slug: string;
+    body: string;
+    category?: string;
+    date: Date;
+    image?: string;
+    description?: string;
+}
+
+const {
+    title,
+    slug,
+    body,
+    category = "NOTE",
+    date,
+    image,
+    description,
+} = Astro.props;
+
+function truncateString(str: string, num: number) {
+    if (str.length <= num) {
+        return str;
+    }
+    return str.slice(0, num) + "...";
+}
+
+function formatDate(d: Date) {
+    const date = new Date(d);
+    const now = new Date();
+    const diffTime = now.getTime() - date.getTime();
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays >= 365) {
+        const years = Math.floor(diffDays / 365);
+        return `${years} YEAR${years > 1 ? "S" : ""} AGO`;
+    }
+    if (diffDays >= 30) {
+        const months = Math.floor(diffDays / 30);
+        return `${months} MONTH${months > 1 ? "S" : ""} AGO`;
+    }
+    if (diffDays > 0) {
+        return `${diffDays} DAY${diffDays > 1 ? "S" : ""} AGO`;
+    }
+    return "TODAY";
+}
+---
+
+{
+    !image ? (
+        <a
+            class="break-inside-avoid flex flex-col gap-4 p-6 border border-transparent hover:bg-white dark:hover:bg-stone-900 hover:border-stone-200 dark:hover:border-stone-800 transition-colors relative group rounded"
+            href={`/writing/${slug}`}
+        >
+            <div class="flex flex-col gap-2 flex-1">
+                <div class="flex items-center justify-between gap-3">
+                    <h4 class="text-stone-900 dark:text-stone-100 text-lg font-bold group-hover:underline decoration-1 underline-offset-4 decoration-stone-400 transition-all">
+                        {title}
+                    </h4>
+                </div>
+                <p class="text-stone-600 dark:text-stone-400 font-serif text-sm leading-relaxed">
+                    {description ||
+                        truncateString(body.replace(/\n/g, " "), 150)}
+                </p>
+                <div class="pt-1 mt-auto">
+                    <span class="font-mono text-xs text-stone-400 dark:text-stone-500 uppercase tracking-wide">
+                        {category.toUpperCase()} • {formatDate(date)}
+                    </span>
+                </div>
+            </div>
+        </a>
+    ) : (
+        <a
+            class="break-inside-avoid flex flex-col bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 transition-colors relative group overflow-hidden rounded"
+            href={`/writing/${slug}`}
+        >
+            <div class="relative w-full aspect-square overflow-hidden bg-stone-100 dark:bg-stone-900 border-b border-stone-200 dark:border-stone-800">
+                <img
+                    alt={title}
+                    class="w-full h-full object-cover"
+                    src={image}
+                />
+            </div>
+            <div class="flex flex-col gap-4 p-6 flex-1">
+                <div class="flex flex-col gap-2 flex-1">
+                    <div class="flex items-center justify-between gap-3">
+                        <h4 class="text-stone-900 dark:text-stone-100 text-lg font-bold group-hover:underline decoration-1 underline-offset-4 decoration-stone-400 transition-all">
+                            {title}
+                        </h4>
+                    </div>
+                    <p class="text-stone-600 dark:text-stone-400 font-serif text-sm leading-relaxed line-clamp-3">
+                        {description ||
+                            truncateString(body.replace(/\n/g, " "), 150)}
+                    </p>
+                    <div class="pt-1 mt-auto">
+                        <span class="font-mono text-xs text-stone-400 dark:text-stone-500 uppercase tracking-wide">
+                            {category.toUpperCase()} • {formatDate(date)}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </a>
+    )
+}

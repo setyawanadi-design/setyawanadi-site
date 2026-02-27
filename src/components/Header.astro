@@ -1,0 +1,275 @@
+---
+const pathname = new URL(Astro.request.url).pathname;
+
+const navItems = [
+    { label: "Writing", path: "/" },
+    { label: "Logs", path: "/logs" },
+    { label: "Gallery", path: "/gallery" },
+];
+---
+
+<header
+    class="sticky top-0 z-50 flex justify-center w-full bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md px-4 md:px-12 py-4 transition-colors"
+>
+    <div class="w-full max-w-6xl mx-auto flex items-center justify-between">
+        <a
+            href="/"
+            class="flex items-center shrink-0 hover:animate-wiggle transition-transform"
+        >
+            <svg
+                class="h-8 w-auto"
+                viewBox="0 0 38 60"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+            >
+                <rect
+                    y="33.2035"
+                    width="40.0507"
+                    height="15.019"
+                    rx="7.5095"
+                    transform="rotate(-56 0 33.2035)"
+                    class="fill-primary/60"></rect>
+                <rect
+                    x="2.29688"
+                    y="27.6399"
+                    width="30.038"
+                    height="12.5158"
+                    rx="6.25792"
+                    transform="rotate(-15 2.29688 27.6399)"
+                    class="fill-primary/80"></rect>
+                <rect
+                    x="3.12891"
+                    y="51.4307"
+                    width="40.0507"
+                    height="15.019"
+                    rx="7.5095"
+                    transform="rotate(-56 3.12891 51.4307)"
+                    class="fill-primary"></rect>
+            </svg>
+        </a>
+        <nav class="hidden md:flex flex-1 justify-end gap-10 items-center">
+            <div class="flex items-center gap-4">
+                {
+                    navItems.map((item) => {
+                        const isActive =
+                            pathname === item.path ||
+                            (item.path !== "/" &&
+                                pathname.startsWith(item.path));
+                        return (
+                            <a
+                                href={item.path}
+                                class={
+                                    isActive
+                                        ? "text-stone-900 dark:text-white font-semibold text-base leading-normal border-b-2 border-primary"
+                                        : "text-stone-500 dark:text-stone-400 hover:text-black dark:hover:text-white transition-colors text-base font-medium"
+                                }
+                            >
+                                {item.label}
+                            </a>
+                        );
+                    })
+                }
+                <div
+                    class="w-1.5 h-6 rounded-full bg-stone-200 dark:bg-stone-700 ml-1"
+                >
+                </div>
+                <button
+                    id="theme-toggle"
+                    class="flex items-center justify-center size-8 rounded-full text-stone-500 cursor-pointer hover:text-black hover:bg-stone-100 dark:text-stone-400 dark:hover:text-white dark:hover:bg-stone-800 transition-colors"
+                    aria-label="Toggle Dark Mode"
+                >
+                    <span
+                        id="theme-icon"
+                        class="material-symbols-outlined text-[20px]"
+                    >
+                        dark_mode
+                    </span>
+                </button>
+            </div>
+        </nav>
+
+        {/* Mobile controls (Theme Toggle + Hamburger) */}
+        <div class="flex items-center gap-2 md:hidden">
+            <button
+                id="theme-toggle-mobile"
+                class="flex items-center justify-center size-8 rounded-full text-stone-500 cursor-pointer hover:text-black hover:bg-stone-100 dark:text-stone-400 dark:hover:text-white dark:hover:bg-stone-800 transition-colors"
+                aria-label="Toggle Dark Mode"
+            >
+                <span
+                    id="theme-icon-mobile"
+                    class="material-symbols-outlined text-[20px]"
+                >
+                    dark_mode
+                </span>
+            </button>
+            <button
+                id="mobile-menu-open"
+                class="flex items-center justify-center size-8 rounded-full text-stone-900 bg-stone-100 dark:bg-stone-800 dark:text-white transition-colors"
+                aria-label="Open Menu"
+            >
+                <span class="material-symbols-outlined text-[20px]">menu</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+{/* Mobile Menu Overlay */}
+<div
+    id="mobile-menu-overlay"
+    class="fixed inset-0 z-[100] bg-background-light dark:bg-background-dark flex flex-col px-4 py-4 transition-transform duration-300 ease-in-out translate-x-full md:hidden"
+>
+    <div class="w-full flex items-center justify-between z-10 relative mt-0">
+        <a href="/" class="flex items-center shrink-0">
+            <svg
+                class="h-8 w-auto"
+                viewBox="0 0 38 60"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+            >
+                <rect
+                    y="33.2035"
+                    width="40.0507"
+                    height="15.019"
+                    rx="7.5095"
+                    transform="rotate(-56 0 33.2035)"
+                    class="fill-primary/60"></rect>
+                <rect
+                    x="2.29688"
+                    y="27.6399"
+                    width="30.038"
+                    height="12.5158"
+                    rx="6.25792"
+                    transform="rotate(-15 2.29688 27.6399)"
+                    class="fill-primary/80"></rect>
+                <rect
+                    x="3.12891"
+                    y="51.4307"
+                    width="40.0507"
+                    height="15.019"
+                    rx="7.5095"
+                    transform="rotate(-56 3.12891 51.4307)"
+                    class="fill-primary"></rect>
+            </svg>
+        </a>
+
+        <button
+            id="mobile-menu-close"
+            class="flex items-center justify-center size-8 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-900 dark:text-white transition-colors"
+            aria-label="Close Menu"
+        >
+            <span class="material-symbols-outlined text-[20px]">close</span>
+        </button>
+    </div>
+
+    <nav class="flex flex-col gap-8 mt-16 flex-1 px-2">
+        {
+            navItems.map((item) => {
+                const isActive =
+                    pathname === item.path ||
+                    (item.path !== "/" && pathname.startsWith(item.path));
+                return (
+                    <a
+                        href={item.path}
+                        class={
+                            isActive
+                                ? "text-stone-900 dark:text-white font-bold text-3xl tracking-tight"
+                                : "text-stone-500 dark:text-stone-400 font-medium text-3xl tracking-tight"
+                        }
+                    >
+                        {item.label}
+                    </a>
+                );
+            })
+        }
+    </nav>
+
+    <div
+        class="mt-auto mb-8 border-t border-stone-200 dark:border-stone-800 pt-8 px-2"
+    >
+        <a
+            href="/contact"
+            class="inline-flex items-center gap-2 text-sm font-bold bg-primary hover:bg-primary/90 text-white px-5 py-3 transition-colors shadow-sm rounded-lg w-full justify-center"
+        >
+            <span class="material-symbols-outlined text-lg">mail</span>
+            Email Me
+        </a>
+    </div>
+</div>
+<script>
+    document.addEventListener("astro:page-load", () => {
+        const themeToggle = document.getElementById("theme-toggle");
+        const themeIcon = document.getElementById("theme-icon");
+        const themeToggleMobile = document.getElementById(
+            "theme-toggle-mobile",
+        );
+        const themeIconMobile = document.getElementById("theme-icon-mobile");
+
+        const mobileMenuOpen = document.getElementById("mobile-menu-open");
+        const mobileMenuClose = document.getElementById("mobile-menu-close");
+        const mobileMenuOverlay = document.getElementById(
+            "mobile-menu-overlay",
+        );
+
+        const element = document.documentElement;
+
+        // Set initial icon on load
+        if (themeIcon) {
+            themeIcon.textContent = element.classList.contains("dark")
+                ? "light_mode"
+                : "dark_mode";
+        }
+        if (themeIconMobile) {
+            themeIconMobile.textContent = element.classList.contains("dark")
+                ? "light_mode"
+                : "dark_mode";
+        }
+
+        const handleToggleClick = () => {
+            const toggle = () => {
+                element.classList.toggle("dark");
+                const isDark = element.classList.contains("dark");
+                localStorage.setItem("theme", isDark ? "dark" : "light");
+
+                const iconText = isDark ? "light_mode" : "dark_mode";
+                if (themeIcon) themeIcon.textContent = iconText;
+                if (themeIconMobile) themeIconMobile.textContent = iconText;
+            };
+
+            if (document.startViewTransition) {
+                document.startViewTransition(toggle);
+            } else {
+                toggle();
+            }
+        };
+
+        if (themeToggle) {
+            themeToggle.removeEventListener("click", handleToggleClick);
+            themeToggle.addEventListener("click", handleToggleClick);
+        }
+        if (themeToggleMobile) {
+            themeToggleMobile.removeEventListener("click", handleToggleClick);
+            themeToggleMobile.addEventListener("click", handleToggleClick);
+        }
+
+        // Mobile Menu Logic
+        if (mobileMenuOpen && mobileMenuClose && mobileMenuOverlay) {
+            mobileMenuOpen.addEventListener("click", () => {
+                mobileMenuOverlay.classList.remove("translate-x-full");
+                document.body.style.overflow = "hidden"; // Prevent background scrolling
+            });
+
+            const closeMenu = () => {
+                mobileMenuOverlay.classList.add("translate-x-full");
+                document.body.style.overflow = "";
+            };
+
+            mobileMenuClose.addEventListener("click", closeMenu);
+
+            // Close menu when a link is clicked to allow view transitions to show
+            const mobileLinks = mobileMenuOverlay.querySelectorAll("a");
+            mobileLinks.forEach((link) => {
+                link.addEventListener("click", closeMenu);
+            });
+        }
+    });
+</script>

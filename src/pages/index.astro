@@ -1,0 +1,84 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+import WritingCard from "../components/WritingCard.astro";
+
+const allWriting = await getCollection("writing");
+
+const sortedWriting = allWriting.sort(
+	(a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf(),
+);
+---
+
+<Layout title="F. — Thoughts on coffee, Bits of Life, Design, and GIS">
+	<main class="flex-1 px-4 md:px-12 py-12 flex flex-col items-center">
+		{/* Centered header matching the max-w-2xl of other pages */}
+		<div
+			class="w-full max-w-2xl flex flex-col gap-4 pt-8 pb-8 md:pb-12 mb-8 md:mb-20"
+		>
+			<h1
+				class="text-stone-900 dark:text-white text-4xl md:text-5xl font-bold tracking-tight leading-tight"
+			>
+				Thoughts on coffee<br />Bits of Life, Design, and GIS
+			</h1>
+			<p
+				class="text-stone-500 dark:text-stone-400 font-serif italic text-lg md:text-xl leading-relaxed max-w-lg"
+			>
+				- by Setyawandi
+			</p>
+		</div>
+
+		{/* Wide container for the staggered masonry layout */}
+		<div
+			class="w-full max-w-6xl columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6"
+		>
+			{
+				sortedWriting.map((item) => (
+					<WritingCard
+						title={item.data.title}
+						slug={item.slug}
+						body={item.body}
+						category={item.data.category}
+						date={item.data.date}
+						image={item.data.image}
+						description={item.data.description}
+					/>
+				))
+			}
+		</div>
+
+		<section
+			class="w-full max-w-2xl mt-8 py-8 border-t border-stone-200 dark:border-stone-800"
+		>
+			<div
+				class="bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 p-8 flex flex-col gap-6 rounded"
+			>
+				<div class="flex flex-col gap-2">
+					<h4
+						class="text-stone-900 dark:text-white font-bold text-lg"
+					>
+						Get in touch
+					</h4>
+					<p
+						class="text-stone-600 dark:text-stone-400 font-serif text-sm leading-relaxed max-w-md"
+					>
+						Have a question or just want to say hello? I'm always
+						open to discussing design, code, or the philosophy of
+						building things.
+					</p>
+				</div>
+				<div class="flex flex-wrap items-center gap-6">
+					<a
+						class="inline-flex items-center gap-2 text-sm font-bold bg-primary hover:bg-primary/90 text-white px-5 py-2.5 transition-colors shadow-sm rounded"
+						href="/contact"
+					>
+						<span class="material-symbols-outlined text-lg"
+							>mail</span
+						>
+						Email Me
+					</a>
+				</div>
+			</div>
+		</section>
+	</main>
+</Layout>

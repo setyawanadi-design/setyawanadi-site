@@ -1,0 +1,30 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-primary: #115e59;
+  --color-background-light: #fdfbf7;
+  --color-background-dark: #121a18;
+
+  --font-display: "Inter", sans-serif;
+  --font-serif: "Merriweather", serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --radius-full: 9999px;
+
+  --animate-wiggle: wiggle 0.5s ease-in-out infinite;
+
+  @keyframes wiggle {
+
+    0%,
+    100% {
+      transform: rotate(-6deg);
+    }
+
+    50% {
+      transform: rotate(6deg);
+    }
+  }
+}
