@@ -5,7 +5,7 @@ const writing = defineCollection({
   schema: z.object({
     title: z.string(),
     date: z.date(),
-    category: z.enum(['Post', 'Note', 'Review']),
+    category: z.string(),
     image: z.string().optional(),
     description: z.string().optional()
   })
